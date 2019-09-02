@@ -19,4 +19,11 @@
     <string name="lbl_my_styles">Mis estilos</string>
     <string name="lbl_best_profiles">Best Profiles</string>
     <string name="lbl_user_profile">Welcome John Doe</string>
+    <string name="lbl_principal">Principal</string>
+    <string name="lbl_take_picture">Tomar foto</string>
+    <string name="lbl_api_data">Datos desde API</string>
+    <string name="lbl_graphic">Gráfica</string>
+    <string name="lbl_edit_picture">Editar Foto</string>
+    <string name="lbl_edit_ai">Editor AI</string>
+    <string name="lbl_nav_menu">1.-Menu de navegacion</string>
 </resources>
