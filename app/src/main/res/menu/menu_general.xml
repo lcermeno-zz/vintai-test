@@ -5,13 +5,13 @@
             android:id="@+id/home"
             android:title="@string/lbl_principal" />
         <item
-            android:id="@+id/catalog"
+            android:id="@+id/take_picture"
             android:title="@string/lbl_take_picture" />
         <item
-            android:id="@+id/my_gifts"
+            android:id="@+id/api_data"
             android:title="@string/lbl_api_data" />
         <item
-            android:id="@+id/ranking"
+            android:id="@+id/graphic"
             android:title="@string/lbl_graphic" />
 
         <item

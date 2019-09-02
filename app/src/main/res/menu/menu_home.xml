@@ -2,16 +2,16 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/home"
+            android:id="@+id/best_post"
             android:title="@string/lbl_best_posts" />
         <item
-            android:id="@+id/catalog"
+            android:id="@+id/statistics"
             android:title="@string/lbl_general_statics" />
         <item
-            android:id="@+id/my_gifts"
+            android:id="@+id/my_styles"
             android:title="@string/lbl_my_styles" />
         <item
-            android:id="@+id/ranking"
+            android:id="@+id/best_profiles"
             android:title="@string/lbl_best_profiles" />
     </group>
 </menu>
