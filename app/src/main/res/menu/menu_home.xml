@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/home"
+            android:title="@string/lbl_best_posts" />
+        <item
+            android:id="@+id/catalog"
+            android:title="@string/lbl_general_statics" />
+        <item
+            android:id="@+id/my_gifts"
+            android:title="@string/lbl_my_styles" />
+        <item
+            android:id="@+id/ranking"
+            android:title="@string/lbl_best_profiles" />
+    </group>
+</menu>
