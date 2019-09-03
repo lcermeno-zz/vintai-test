@@ -5,13 +5,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -20,11 +25,13 @@ import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
+import com.otaliastudios.cameraview.CameraView;
 import com.qiubo.vintai.R;
 import com.qiubo.vintai.ui.fragments.PostsFragment;
 
 public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener {
 
+    private static final int PERMISSION_CODE = 144;
     private DrawerLayout mDrawerLayout;
 
     @Override
@@ -96,41 +103,6 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
             }
         });
 
-//        final NavigationView generalNavigationView = findViewById(R.id.nav_general_menu);
-//        generalNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-//            @Override
-//            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-//                Fragment fragment = null;
-//                switch (menuItem.getItemId()) {
-//                    case R.id.home:
-//                        fragment = getFragmentByTag("home");
-//                        if(fragment == null) fragment = PostsFragment.newInstance();
-//                        break;
-//                    case R.id.take_picture:
-//                        fragment = getFragmentByTag("take_picture");
-//                        break;
-//                    case R.id.api_data:
-//                        fragment = getFragmentByTag("api_data");
-//                        break;
-//                    case R.id.graphic:
-//                        fragment = getFragmentByTag("graphic");
-//                        break;
-//                    case R.id.edit_picture:
-//                        fragment = getFragmentByTag("edit_picture");
-//                        break;
-//                    case R.id.edit_ai:
-//                        fragment = getFragmentByTag("edit_ai");
-//                        break;
-//                }
-//
-//                if(fragment != null)
-//                    setupFragment(fragment);
-//
-//                mDrawerLayout.closeDrawer(GravityCompat.END);
-//                return true;
-//            }
-//        });
-
         final AppCompatImageButton generalMenuBtn = findViewById(R.id.btn_right_menu);
         final View menuContainer = findViewById(R.id.menu_container);
         generalMenuBtn.setOnClickListener(new View.OnClickListener() {
@@ -166,7 +138,12 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
                 if (fragment == null) fragment = PostsFragment.newInstance();
                 break;
             case R.id.take_picture:
-                fragment = getFragmentByTag("take_picture");
+                if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                    // Permission is not granted
+                    ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.CAMERA}, PERMISSION_CODE);
+                } else {
+                    startActivity(new Intent(MainActivity.this, CameraViewActivity.class));
+                }
                 break;
             case R.id.api_data:
                 fragment = getFragmentByTag("api_data");
@@ -185,5 +162,17 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
         if (fragment != null) setupFragment(fragment);
 
         return true;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case PERMISSION_CODE:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    startActivity(new Intent(this, CameraView.class));
+                }
+                break;
+        }
     }
 }
