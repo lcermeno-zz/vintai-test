@@ -26,4 +26,6 @@
     <string name="lbl_edit_picture">Editar Foto</string>
     <string name="lbl_edit_ai">Editor AI</string>
     <string name="lbl_nav_menu">1.-Menu de navegacion</string>
+    <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris</string>
+    <string name="lbl_comments">Comentarios</string>
 </resources>
