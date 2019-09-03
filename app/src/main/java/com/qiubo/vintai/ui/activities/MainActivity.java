@@ -2,6 +2,7 @@ package com.qiubo.vintai.ui.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
@@ -10,16 +11,19 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.os.Bundle;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 import com.qiubo.vintai.R;
 import com.qiubo.vintai.ui.fragments.PostsFragment;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener {
 
     private DrawerLayout mDrawerLayout;
 
@@ -70,50 +74,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        final NavigationView generalNavigationView = findViewById(R.id.nav_general_menu);
-        generalNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                Fragment fragment = null;
-                switch (menuItem.getItemId()) {
-                    case R.id.home:
-                        fragment = getFragmentByTag("home");
-                        if(fragment == null)
-                            fragment = PostsFragment.newInstance();
-                        break;
-                    case R.id.take_picture:
-                        fragment = getFragmentByTag("take_picture");
-                        break;
-                    case R.id.api_data:
-                        fragment = getFragmentByTag("api_data");
-                        break;
-                    case R.id.graphic:
-                        fragment = getFragmentByTag("graphic");
-                        break;
-                    case R.id.edit_picture:
-                        fragment = getFragmentByTag("edit_picture");
-                        break;
-                    case R.id.edit_ai:
-                        fragment = getFragmentByTag("edit_ai");
-                        break;
-                }
-
-                if(fragment != null)
-                    setupFragment(fragment);
-
-                mDrawerLayout.closeDrawer(GravityCompat.END);
-                return true;
-            }
-        });
-
-        final AppCompatImageButton generalMenuBtn = findViewById(R.id.btn_right_menu);
-        generalMenuBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mDrawerLayout.openDrawer(GravityCompat.END);
-            }
-        });
-
         mDrawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
             public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
@@ -135,6 +95,56 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+//        final NavigationView generalNavigationView = findViewById(R.id.nav_general_menu);
+//        generalNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+//            @Override
+//            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+//                Fragment fragment = null;
+//                switch (menuItem.getItemId()) {
+//                    case R.id.home:
+//                        fragment = getFragmentByTag("home");
+//                        if(fragment == null) fragment = PostsFragment.newInstance();
+//                        break;
+//                    case R.id.take_picture:
+//                        fragment = getFragmentByTag("take_picture");
+//                        break;
+//                    case R.id.api_data:
+//                        fragment = getFragmentByTag("api_data");
+//                        break;
+//                    case R.id.graphic:
+//                        fragment = getFragmentByTag("graphic");
+//                        break;
+//                    case R.id.edit_picture:
+//                        fragment = getFragmentByTag("edit_picture");
+//                        break;
+//                    case R.id.edit_ai:
+//                        fragment = getFragmentByTag("edit_ai");
+//                        break;
+//                }
+//
+//                if(fragment != null)
+//                    setupFragment(fragment);
+//
+//                mDrawerLayout.closeDrawer(GravityCompat.END);
+//                return true;
+//            }
+//        });
+
+        final AppCompatImageButton generalMenuBtn = findViewById(R.id.btn_right_menu);
+        final View menuContainer = findViewById(R.id.menu_container);
+        generalMenuBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Context wrapper = new ContextThemeWrapper(MainActivity.this, R.style.PopupMenu);
+                PopupMenu popup = new PopupMenu(wrapper, menuContainer);
+                MenuInflater inflater = popup.getMenuInflater();
+                inflater.inflate(R.menu.menu_general, popup.getMenu());
+
+                popup.setOnMenuItemClickListener(MainActivity.this);
+                popup.show();
+            }
+        });
     }
 
     private Fragment getFragmentByTag(String tag) {
@@ -144,6 +154,36 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onSupportNavigateUp() {
         mDrawerLayout.openDrawer(GravityCompat.START);
+        return true;
+    }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        Fragment fragment = null;
+        switch (item.getItemId()) {
+            case R.id.home:
+                fragment = getFragmentByTag("home");
+                if (fragment == null) fragment = PostsFragment.newInstance();
+                break;
+            case R.id.take_picture:
+                fragment = getFragmentByTag("take_picture");
+                break;
+            case R.id.api_data:
+                fragment = getFragmentByTag("api_data");
+                break;
+            case R.id.graphic:
+                fragment = getFragmentByTag("graphic");
+                break;
+            case R.id.edit_picture:
+                fragment = getFragmentByTag("edit_picture");
+                break;
+            case R.id.edit_ai:
+                fragment = getFragmentByTag("edit_ai");
+                break;
+        }
+
+        if (fragment != null) setupFragment(fragment);
+
         return true;
     }
 }

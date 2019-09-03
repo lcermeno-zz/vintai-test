@@ -1,25 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <group android:checkableBehavior="single">
-        <item
-            android:id="@+id/home"
-            android:title="@string/lbl_principal" />
-        <item
-            android:id="@+id/take_picture"
-            android:title="@string/lbl_take_picture" />
-        <item
-            android:id="@+id/api_data"
-            android:title="@string/lbl_api_data" />
-        <item
-            android:id="@+id/graphic"
-            android:title="@string/lbl_graphic" />
+    <item
+        android:id="@+id/home"
+        android:title="@string/lbl_principal" />
+    <item
+        android:id="@+id/take_picture"
+        android:title="@string/lbl_take_picture" />
+    <item
+        android:id="@+id/api_data"
+        android:title="@string/lbl_api_data" />
+    <item
+        android:id="@+id/graphic"
+        android:title="@string/lbl_graphic" />
 
-        <item
-            android:id="@+id/edit_picture"
-            android:title="@string/lbl_edit_picture" />
+    <item
+        android:id="@+id/edit_picture"
+        android:title="@string/lbl_edit_picture" />
 
-        <item
-            android:id="@+id/edit_ai"
-            android:title="@string/lbl_edit_ai" />
-    </group>
+    <item
+        android:id="@+id/edit_ai"
+        android:title="@string/lbl_edit_ai" />
 </menu>

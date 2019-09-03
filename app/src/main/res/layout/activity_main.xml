@@ -17,16 +17,6 @@
         app:headerLayout="@layout/drawer_nav_header"
         app:menu="@menu/menu_home" />
 
-    <com.google.android.material.navigation.NavigationView
-        android:id="@+id/nav_general_menu"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="end"
-        android:background="@android:color/white"
-        android:fitsSystemWindows="true"
-        app:headerLayout="@layout/drawer_general_header"
-        app:menu="@menu/menu_general" />
-
     <include layout="@layout/activity_main_content" />
 
 </androidx.drawerlayout.widget.DrawerLayout>

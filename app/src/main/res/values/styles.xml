@@ -27,4 +27,8 @@
         <item name="android:theme">@style/Base.ThemeOverlay.AppCompat.Dark.ActionBar</item>
     </style>
 
+    <style name="PopupMenu" parent="Widget.AppCompat.PopupMenu.Overflow">
+        <item name="android:textColor">@android:color/black</item>
+    </style>
+
 </resources>
