@@ -12,4 +12,8 @@
     <dimen name="cardview_comment_height">100dp</dimen>
     <dimen name="cardview_comment_radius">4dp</dimen>
     <dimen name="cardview_elevation">4dp</dimen>
+
+    <dimen name="editor_size">35dp</dimen>
+    <dimen name="normal_margin">8dp</dimen>
+    <dimen name="large_margin">16dp</dimen>
 </resources>

@@ -1,6 +1,31 @@
 package com.qiubo.vintai.ui.activities;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Bundle;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.PopupMenu;
+import android.widget.Toast;
+
+import com.google.android.material.navigation.NavigationView;
+import com.qiubo.vintai.R;
+import com.qiubo.vintai.ui.fragments.PostsFragment;
+import com.qiubo.vintai.widgets.ImageFilePath;
+import com.zhihu.matisse.Matisse;
+import com.zhihu.matisse.MimeType;
+import com.zhihu.matisse.engine.impl.GlideEngine;
+
+import java.util.List;
+
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.appcompat.widget.AppCompatImageButton;
@@ -12,26 +37,11 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.Manifest;
-import android.annotation.SuppressLint;
-import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.os.Bundle;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.PopupMenu;
-import android.widget.Toast;
-
-import com.google.android.material.navigation.NavigationView;
-import com.otaliastudios.cameraview.CameraView;
-import com.qiubo.vintai.R;
-import com.qiubo.vintai.ui.fragments.PostsFragment;
-
 public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener {
 
-    private static final int PERMISSION_CODE = 144;
+    private static final int PERMISSION_CAMERA_CODE = 144;
+    private static final int PERMISSION_STORAGE_CODE = 255;
+    private static final int REQUEST_CODE_PICKER = 366;
     private DrawerLayout mDrawerLayout;
 
     @Override
@@ -140,19 +150,22 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
             case R.id.take_picture:
                 if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
                     // Permission is not granted
-                    ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.CAMERA}, PERMISSION_CODE);
+                    ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.CAMERA}, PERMISSION_CAMERA_CODE);
                 } else {
                     startActivity(new Intent(MainActivity.this, CameraViewActivity.class));
                 }
                 break;
-            case R.id.api_data:
-                fragment = getFragmentByTag("api_data");
-                break;
             case R.id.graphic:
-                fragment = getFragmentByTag("graphic");
+            case R.id.api_data:
+                Toast.makeText(this, "On another occasion it may be", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.edit_picture:
-                fragment = getFragmentByTag("edit_picture");
+                if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    // Permission is not granted
+                    ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_STORAGE_CODE);
+                } else {
+                    openPicker();
+                }
                 break;
             case R.id.edit_ai:
                 fragment = getFragmentByTag("edit_ai");
@@ -168,11 +181,51 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
-            case PERMISSION_CODE:
+            case PERMISSION_CAMERA_CODE:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    startActivity(new Intent(this, CameraView.class));
+                    startActivity(new Intent(this, CameraViewActivity.class));
+                }
+                break;
+            case PERMISSION_STORAGE_CODE:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    openPicker();
                 }
                 break;
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case REQUEST_CODE_PICKER:
+                if (resultCode == RESULT_OK && data != null) {
+                    onMediaPicked(data);
+                }
+                break;
+        }
+    }
+
+
+
+    private void onMediaPicked(Intent data) {
+        List<Uri> uris = Matisse.obtainResult(data);
+        if (uris != null && !uris.isEmpty()) {
+            Intent intent = new Intent(this, EditorActivity.class);
+            intent.putExtra("uri", ImageFilePath.getInstance().getPath(this, uris.get(0)));
+            startActivity(intent);
+        }
+    }
+
+    private void openPicker() {
+        Matisse.from(this)
+                .choose(MimeType.of(MimeType.JPEG, MimeType.PNG, MimeType.MP4, MimeType.MPEG), false)
+                .countable(true)
+                .maxSelectable(1)
+                .spanCount(3)
+                .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
+                .thumbnailScale(0.5f)
+                .imageEngine(new GlideEngine())
+                .forResult(REQUEST_CODE_PICKER);
     }
 }
